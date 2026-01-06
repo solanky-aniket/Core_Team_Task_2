@@ -1,4 +1,4 @@
-#Simple Voting Smart Contract
+Simple Voting Smart Contract
 
  Overview
 This contract enables a transparent and fair voting system between two candidates.
@@ -27,4 +27,5 @@ Security Filters
 
  Solidity Version
  Solidity >=0.8.20
+
 
