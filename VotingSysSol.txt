@@ -1,0 +1,50 @@
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.8.20;
+
+contract SimpleVoting {
+    address public admin;
+
+    enum VotingStatus { Off, On }
+    VotingStatus public status;
+
+    uint256 public candidate1Votes;
+    uint256 public candidate2Votes;
+
+    mapping(address => bool) public hasVoted;
+
+    // Set deployer as admin and turn voting OFF by default
+    constructor() {
+        admin = msg.sender;
+        status = VotingStatus.Off;
+    }
+
+    function toggleVoting(bool _on) external {
+        require(msg.sender == admin, "Only admin can toggle voting");
+
+        if (_on) {
+            status = VotingStatus.On;
+        } else {
+            status = VotingStatus.Off;
+        }
+    }
+
+
+    function vote(uint256 _candidateId) external {
+        require(status == VotingStatus.On, "Voting is currently closed");
+        require(!hasVoted[msg.sender], "You have already voted");
+        require(_candidateId == 1 || _candidateId == 2, "Invalid candidate");
+
+        hasVoted[msg.sender] = true;
+
+        if (_candidateId == 1) {
+            candidate1Votes++;
+        } else {
+            candidate2Votes++;
+        }
+    }
+
+
+    function getVotes() external view returns (uint256, uint256) {
+        return (candidate1Votes, candidate2Votes);
+    }
+}
